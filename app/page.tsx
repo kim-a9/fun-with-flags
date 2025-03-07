@@ -1,10 +1,11 @@
+import {Header, Footer } from './components';
 
 export default function Home() {
   return (
     <>
-      <header>Header</header>
+      <Header />
       <main className="flex-1">Main</main>
-      <footer>Footer</footer>
+      <Footer />
     </>
   );
 }

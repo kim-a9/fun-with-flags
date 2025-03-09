@@ -1,14 +1,14 @@
 type CardProps = {
-    id: number; 
+    id: any; 
     country: string;
     capital: string;
     region: string;
     population: string;
 };
 
-const Card = ({ id, country, capital, region, population }) => {
+const Card = ({ id, country, capital, region, population }: CardProps) => {
     return (
-        <div id={id.toString()} 
+        <div id={id} 
         className="h-full bg-white rounded-lg shadow-lg">
             <div className="aspect-video w-full"> 
                 <img src="https://placehold.co/600x400" className="w-full h-full object-cover"/> 

@@ -15,13 +15,13 @@ export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+}>) { 
   return (
     <html lang="en">
       <body
         className={`${notoSans.className} antialiased`}
       >
-        {children}
+        {children} 
       </body>
     </html>
   );

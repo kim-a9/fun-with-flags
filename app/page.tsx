@@ -2,40 +2,72 @@
 import { useEffect, useState } from 'react';
 import {Card, Footer, Grid, Header  } from './components';
 
+type Country ={ 
+  cca3: string;
+  flags: {
+    svg: string;
+  },
+  name: {
+    common: string;
+  },
+  capital: string;
+  region: string;
+  population: number;
+}
+
 export default function Home() {
-const [ countries, setCountries ] = useState([]);
+const [ countries, setCountries ] = useState<Country[]>([]);
+const [loading, setLoading ] = useState(true);
+const [error, setError ] = useState<string | null>(null);
 
   useEffect(() => {
-
     const fetchCountries = async () => {
-      const response = await fetch('https://restcountries.com/v3.1/all');
+      try{
+      const response = await fetch('https://restcountries.com/v3.1/all?fields=cca3,flags,name,capital,region,population');
       const data = await response.json();
       // countries.push(...data);
       setCountries(data);
-    
+      } catch (error) {
+        setError("Failed to fetch");
+      } finally {
+        setLoading(false);
+      }
     };
-
-
     fetchCountries();
   }, []);
+
+if (loading) return <div>Loading...</div>;
+if (error) return <div>{error}</div>;
 
   return (
     <>
       <Header />
       <main className="flex-1">
         <Grid>
-        {countries.map(({ id, name, capital, region, population} ) => (
-          <Card
-            id={id}
-            country={name.common}
-            capital={capital}
-            region={region}
-            population={population} 
-          />
-        ))}
+        {countries.map((
+          { cca3, flags, name, capital, region, population }, index ) => {
+            const {svg} = flags ?? {};
+            const {common: countryName} = name ?? {};
+            const [capitalName] = capital ?? [];
+            
+            return (
+            <Card
+              key={cca3}
+              index={index}
+              flag={flags.svg}
+              name={countryName}
+              capital={capitalName}
+              region={region}
+              population={population} 
+              />
+            );
+          }
+        )
+        };
         </Grid>  
       </main>
-      <Footer />
+      <Header />
     </>
-  );
-} 
+
+  ); 
+}

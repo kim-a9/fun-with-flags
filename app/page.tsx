@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import {Card, Footer, Grid, Header  } from './components';
+import {Card, Grid } from './components';
 import Link from 'next/link';
 import { countriesApi } from './services';
 
@@ -40,9 +40,6 @@ if (loading) return <div>Loading...</div>;
 if (error) return <div>{error}</div>;
 
   return (
-    <>
-      <Header />
-      <main className="flex-1">
         <Grid>
         {countries.map((
           { cca3, flags, name, capital, region, population }, index ) => {
@@ -66,9 +63,6 @@ if (error) return <div>{error}</div>;
         )
         };
         </Grid>  
-      </main>
-      <Footer />
-    </>
 
   ); 
 }

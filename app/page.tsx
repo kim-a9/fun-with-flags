@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import {Card, Footer, Grid, Header  } from './components';
+import Link from 'next/link';
 import { countriesApi } from './services';
 
 type Country ={ 
@@ -50,8 +51,8 @@ if (error) return <div>{error}</div>;
             const [capitalName] = capital ?? [];
             
             return (
+              <Link href={`/country/${cca3}`} key={cca3}>
             <Card
-              key={cca3}
               index={index}
               flag={flags.svg}
               name={countryName}
@@ -59,6 +60,7 @@ if (error) return <div>{error}</div>;
               region={region}
               population={population} 
               />
+            </Link>
             );
           }
         )

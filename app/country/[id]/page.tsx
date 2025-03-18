@@ -1,13 +1,58 @@
+'use client';
+
+import { useEffect, useState } from "react";
+import { countriesApi } from "../../services";
 import Link from "next/link";
 import Image from "next/image";
+import { useParams } from "next/navigation";
+import { Params } from "next/dist/server/request/params";
 
-type Props = {
-    params: Promise<{ id: string }>;
-}
+// type Props = {
+//     params: Promise<{ id: string }>;
+//     // params: { id: string };
+
+// }
+
+type Params = {
+    id: string;
+};
 
 export default async function Country({ params }: Props) {
-    const id = (await params).id;
-    const name = "Brazil";
+    const nome = "Brazil";
+    const param = useParams<Params>();
+    const [id, setId] = useState<string | null>(null);
+    const [country, setCountry] = useState<Country>();
+    const [loading, setLoading ] = useState(true);
+    const [error, setError ] = useState<string | null>(null);
+    
+    useEffect(() => {
+        if (params?.id && params.id !== id) {
+            setId(params.id as string);
+        }
+    }, [params, id]);
+
+      useEffect(() => {
+          const fetchCountries = async () => {
+              const [response, error] = await countriesApi.getCountry(id);
+              setLoading(false);
+              
+              if (error) {
+                  setError(error);
+                  return;
+                }
+                setCountry(response); 
+            };  
+        if (id) {
+            fetchCountries();
+        }
+      }, [id]);
+    
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>{error}</div>;
+
+
+    // const id = (await params).id;
+    // const name = "Brazil";
     return (
         <>
         <div className="mb-8">
@@ -26,7 +71,7 @@ export default async function Country({ params }: Props) {
             </div>
             <div>
                 <div className="flex flex-col justify-center p-6 text-sm text-gray-600">
-                    <h2 className="text-xl font-semibold mb-4">Brazil ({id})</h2>
+                    <h2 className="text-xl font-semibold mb-4">Brazil </h2>
                     <div className="space-y-2">
                     <div className="flex items-center gap-1">
                         <span className="font-semibold">Capital:</span>

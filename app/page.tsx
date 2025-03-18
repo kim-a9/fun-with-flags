@@ -4,7 +4,7 @@ import {Card, Grid } from './components';
 import Link from 'next/link';
 import { countriesApi } from './services';
 
-type Country ={ 
+type Country = { 
   cca3: string;
   flags: {
     svg: string;

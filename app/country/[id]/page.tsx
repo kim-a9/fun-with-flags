@@ -5,7 +5,7 @@ import { countriesApi } from "../../services";
 import Link from "next/link";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { Params } from "next/dist/server/request/params";
+// import { Params } from "next/dist/server/request/params";
 
 // type Props = {
 //     params: Promise<{ id: string }>;
@@ -17,9 +17,9 @@ type Params = {
     id: string;
 };
 
-export default async function Country({ params }: Props) {
+export default async function Country() {
     const nome = "Brazil";
-    const param = useParams<Params>();
+    const params = useParams<Params>();
     const [id, setId] = useState<string | null>(null);
     const [country, setCountry] = useState<Country>();
     const [loading, setLoading ] = useState(true);

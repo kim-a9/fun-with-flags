@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 import { countriesApi } from "../../services";
@@ -13,15 +13,32 @@ import { useParams } from "next/navigation";
 
 // }
 
+type DetailedCountry = {
+    cca3: string;
+    flags: {
+        svg: string;
+    };
+    name: {
+        common: string;
+        official: string;
+    };
+    capital: string[];
+    region: string;
+    population: number;
+    languages:Record<string, string>;
+    currencies: Record<string, {name: string; symbol: string }>;
+    tld: string[];
+    borders: string[];
+}
+
 type Params = {
     id: string;
 };
 
-export default async function Country() {
-    const nome = "Brazil";
+export default function Country() {
     const params = useParams<Params>();
     const [id, setId] = useState<string | null>(null);
-    const [country, setCountry] = useState<Country>();
+    const [country, setCountry] = useState<DetailedCountry>();
     const [loading, setLoading ] = useState(true);
     const [error, setError ] = useState<string | null>(null);
     
@@ -42,6 +59,7 @@ export default async function Country() {
                 }
                 setCountry(response); 
             };  
+
         if (id) {
             fetchCountries();
         }
@@ -50,9 +68,18 @@ export default async function Country() {
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
 
+    const { name, flags, capital, region, population, 
+    languages, currencies, tld, borders } = country ?? {};
 
-    // const id = (await params).id;
-    // const name = "Brazil";
+    const {svg: flag} = flags ?? {};
+    const {common: countryName, official: officialName } = name ?? {};
+    const [capitalName] = capital ?? [];
+    const languagesNames = Object.values(languages ?? {}).join(", ");
+    const currenciesNames = Object.values(currencies ?? {}).map(({name, symbol}) => `${name} (${symbol})`).join(", "); 
+    const [TopLevelDomain] = tld ?? [];
+    const bordersId = borders?.join(", ") ?? "";
+
+
     return (
         <>
         <div className="mb-8">
@@ -62,44 +89,45 @@ export default async function Country() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-[auto_ifr] gap-4">
             <div className="w-full md:MAX-w-[400px]">
-            <Image src={"/flagplaceholder.svg"} 
-            alt={"Flag of s'{name}"}
+            <Image src={flag || "/flagplaceholder.svg"} 
+            alt={"Flag of ${countryName}"} 
             className="w-full h-full"
             width={500}
             height={300}
+            priority
             />
             </div>
             <div>
                 <div className="flex flex-col justify-center p-6 text-sm text-gray-600">
-                    <h2 className="text-xl font-semibold mb-4">Brazil </h2>
+                    <h2 className="text-xl font-semibold mb-4">{countryName} ({id})</h2>
                     <div className="space-y-2">
                     <div className="flex items-center gap-1">
                         <span className="font-semibold">Capital:</span>
-                        <span>Brasilia</span>
+                        <span>{capitalName}</span>
                     </div>
                     <div className="flex items-center gap-1">
                         <span className="font-semibold">Region:</span>
-                        <span>South America</span>
+                        <span>{region}</span>
                     </div>
                     <div className="flex items-center gap-1">
                         <span className="font-semibold">Population:</span>
-                        <span>21259489</span>
+                        <span>{population}</span>
                     </div>
                     <div className="flex items-center gap-1">
                         <span className="font-semibold">Languages:</span>
-                        <span></span>
+                        <span>{languagesNames}</span>
                     </div>
                     <div className="flex items-center gap-1">
                         <span className="font-semibold">Currencies:</span>
-                        <span></span>
+                        <span>{currenciesNames}</span>
                     </div>
                     <div className="flex items-center gap-1">
                         <span className="font-semibold">Top Level Domain:</span>
-                        <span></span>
+                        <span>{TopLevelDomain}</span>
                     </div>
                     <div className="flex items-center gap-1">
                         <span className="font-semibold">Borders:</span>
-                        <span></span>
+                        <span>{bordersId}</span>
                     </div>
                     </div>
                 </div>

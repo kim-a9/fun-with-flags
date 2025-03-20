@@ -61,7 +61,7 @@ if (error) return <div>{error}</div>;
             );
           }
         )
-        };
+        }
         </Grid>  
 
   ); 

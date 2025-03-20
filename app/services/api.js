@@ -1,29 +1,32 @@
+process.env.NEXT_PUBLIC_API_URL = 'https://restcountries.com/v3.1';
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 
 const ApiClient = (baseUrl) => ({
     async get(endpoint) {
         try {
-            const response = await fetch(baseUrl + endpoint);
+            const response = await fetch(`${baseUrl}${endpoint}`);
             if (!response.ok) {
-                return [null, 'HTTP Error. Status: ' + (response.status)];
+                return [null, 'HTTP Error! Status: ${response.status}'];
             }
             const data = await response.json();
             return [data, null];
         } catch (error) {
-            console.error("API request failed", error);
+            console.error("API request failed:", error);
             return [null, error.message];
         }
-    }
+    },
 });
 
-const api = ApiClient('https://restcountries.com/v3.1');
+// https://restcountries.com/v3.1
+// https://restcountries.com/v3.1/all
+const api = ApiClient(apiUrl);
 
 const baseFields = 'cca3,flags,name,capital,region,population';
 
-// https://restcountries.com/v3.1
 const countriesApi = {
-    getAll: () => api.get('/all?fields=${baseFields}'),
-    getCountry: (id) => api.get('/alpha/${id}?fields=${baseFields},languages,currencies,tld,borders'),
-}
+    getAll: () => api.get(`/all?fields=${baseFields}`),
+    getCountry: (id) => api.get(`/alpha/${id}?fields=${baseFields},languages,currencies,tld,borders`),
+};
 
 export { countriesApi };

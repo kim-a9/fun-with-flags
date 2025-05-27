@@ -25,7 +25,7 @@ type DetailedCountry = {
     capital: string[];
     region: string;
     population: number;
-    languages:Record<string, string>;
+    languages: Record<string, string>;
     currencies: Record<string, {name: string; symbol: string }>;
     tld: string[];
     borders: string[];
@@ -68,6 +68,7 @@ export default function Country() {
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
 
+
     const { name, flags, capital, region, population, 
     languages, currencies, tld, borders } = country ?? {};
 
@@ -88,10 +89,10 @@ export default function Country() {
             </Link>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-[auto_ifr] gap-4">
-            <div className="w-full md:MAX-w-[400px]">
+            <div className="flex items-center md:max-w-[400px]">
             <Image src={flag || "/flagplaceholder.svg"} 
             alt={"Flag of ${countryName}"} 
-            className="w-full h-full"
+            className="max-h-80 object-cover rounded-lg"
             width={500}
             height={300}
             priority

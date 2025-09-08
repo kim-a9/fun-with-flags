@@ -103,6 +103,9 @@ export default function Country() {
                     <h2 className="text-xl font-semibold mb-4">{countryName} ({id})</h2>
                     <div className="space-y-2">
                     <div >
+                        <span className="font-semibold">Official Name:</span> {officialName}
+                    </div>
+                    <div >
                         <span className="font-semibold">Capital:</span> {capitalName}
                     </div>
                     <div >

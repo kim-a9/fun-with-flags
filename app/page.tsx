@@ -39,6 +39,8 @@ const [error, setError ] = useState<string | null>(null);
 if (loading) return <div>Loading...</div>;
 if (error) return <div>{error}</div>;
 
+const sortedCountries = countries.sort((a, b) => a.name.common.localeCompare(b.name.common, 'en-US'));
+
   return (
         <Grid>
         {countries.map((

@@ -1,4 +1,5 @@
 "use client";
+import { formatNumber } from '../../utils';
 
 import { useEffect, useState } from "react";
 import { countriesApi } from "../../services";
@@ -112,7 +113,7 @@ export default function Country() {
                         <span className="font-semibold">Region:</span> {region}
                     </div>
                     <div >
-                        <span className="font-semibold">Population:</span> {population}
+                        <span className="font-semibold">Population:</span> {formatNumber(population)}
                     </div>
                     <div >
                         <span className="font-semibold">Languages:</span> {languagesNames}

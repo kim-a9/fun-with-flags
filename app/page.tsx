@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import {Card, Grid } from './components';
+import {Card, Grid, Search } from './components';
 import Link from 'next/link';
 import { countriesApi } from './services';
 
@@ -20,6 +20,7 @@ type Country = {
 export default function Home() {
 const [ countries, setCountries ] = useState<Country[]>([]);
 const [loading, setLoading ] = useState(true);
+const [ search, setSearch ] = useState("");
 const [error, setError ] = useState<string | null>(null);
 
   useEffect(() => {
@@ -41,30 +42,37 @@ if (error) return <div>{error}</div>;
 
 const sortedCountries = countries.sort((a, b) => a.name.common.localeCompare(b.name.common, 'en-US'));
 
-  return (
-        <Grid>
-        {countries.map((
-          { cca3, flags, name, capital, region, population }, index ) => {
-            const {svg} = flags ?? {};
-            const {common: countryName} = name ?? {};
-            const [capitalName] = capital ?? [];
-            
-            return (
-              <Link href={`/country/${cca3}`} key={cca3}>
-            <Card
-              index={index}
-              flag={flags.svg}
-              name={countryName}
-              capital={capitalName}
-              region={region}
-              population={population} 
-              />
-            </Link>
-            );
-          }
-        )
-        }
-        </Grid>  
+const filteredCountries = sortedCountries.filter(({ name }) =>
+  name.common.toLowerCase().includes(search.toLowerCase())) 
 
+  return (
+      <>
+        <div className="mb-8">
+            <Search count={filteredCountries.length} search={search} setSearch={setSearch}/>
+        </div>
+          <Grid>
+          {filteredCountries.map((
+            { cca3, flags, name, capital, region, population }, index ) => {
+              const {svg} = flags ?? {};
+              const {common: countryName} = name ?? {};
+              const [capitalName] = capital ?? [];
+              
+              return (
+                <Link href={`/country/${cca3}`} key={cca3}>
+              <Card
+                index={index}
+                flag={flags.svg}
+                name={countryName}
+                capital={capitalName}
+                region={region}
+                population={population} 
+                />
+              </Link>
+              );
+            }
+          )
+          }
+          </Grid>  
+        </>
   ); 
 }
